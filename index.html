@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PsychNote Engine</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-light font-inter">
+
+<!-- ================= TOPBAR ================= -->
+
+<header class="topbar">
+
+  <div class="top-left">
+    <button id="toggleLeft" class="icon-btn">☰</button>
+
+    <div class="brand">
+      <div class="title">PsychNote</div>
+      <div class="subtitle">clinique + cognition + écriture</div>
+    </div>
+  </div>
+
+  <div class="top-center">
+
+    <button class="pill" data-menu="typeMenu">
+      <span>Type</span>
+      <strong id="typeDisplay">administratif</strong>
+    </button>
+
+    <button class="pill" data-menu="subTypeMenu">
+      <span>Sous-type</span>
+      <strong id="subTypeDisplay">rapport mutuelle</strong>
+    </button>
+
+    <button class="pill" data-menu="modeMenu">
+      <span>Mode</span>
+      <strong id="modeDisplay">complet</strong>
+    </button>
+
+    <button class="pill" data-menu="outputMenu">
+      <span>Sortie</span>
+      <strong id="outputDisplay">texte</strong>
+    </button>
+
+    <button class="pill" data-menu="themeMenu">
+      <span>Thème</span>
+      <strong id="themeDisplay">clair</strong>
+    </button>
+
+  </div>
+
+  <div class="top-right">
+
+    <button id="btnText" class="action">Texte</button>
+    <button id="btnQuestionnaire" class="action">Questionnaire</button>
+    <button id="btnCopy" class="action">Copier</button>
+    <button id="btnPrint" class="action">Print</button>
+
+    <button id="toggleRight" class="icon-btn">≡</button>
+
+  </div>
+
+</header>
+
+<!-- ================= APP ================= -->
+
+<div class="app">
+
+<!-- ========== LEFT PANEL ========== -->
+
+<aside id="leftPanel" class="panel left">
+
+<div class="panel-content">
+
+<!-- PLANNING -->
+<section class="block">
+<div class="block-title">Planning</div>
+
+<div class="row">
+<button class="mini" data-view="day">Jour</button>
+<button class="mini" data-view="week">Semaine</button>
+<button class="mini" data-view="half">Demi-journée</button>
+</div>
+
+<div class="token-wrap" id="planningModes"></div>
+
+</section>
+
+<!-- TASK INBOX -->
+<section class="block">
+<div class="block-title">Panier de tâches</div>
+
+<textarea id="taskInbox" placeholder="Tout déposer ici..."></textarea>
+
+<div class="token-wrap" id="taskTypes"></div>
+
+<div class="row">
+<button id="btnDistribute" class="action">Distribuer</button>
+<button id="btnRoulette" class="action">Roulette</button>
+</div>
+</section>
+
+<!-- DAILY GOAL -->
+<section class="block">
+<div class="block-title">Objectif</div>
+
+<input id="dailyGoal" placeholder="Dossiers / jour (ex : 10)">
+
+<div class="token-wrap" id="goalTracking"></div>
+
+</section>
+
+<!-- PATIENT BLOCK -->
+<section class="block">
+<div class="block-title">Patients</div>
+
+<textarea id="patientList" placeholder="Un patient par ligne"></textarea>
+
+<div class="token-wrap" id="patientChecklist"></div>
+
+</section>
+
+<!-- HABITS -->
+<section class="block">
+<div class="block-title">Habitudes</div>
+
+<div class="token-wrap" id="habitChoices"></div>
+
+<div class="habit-grid" id="habitGrid"></div>
+
+</section>
+
+<!-- HISTORY -->
+<section class="block">
+<div class="block-title">Historique</div>
+
+<textarea id="historyNotes"></textarea>
+
+</section>
+
+</div>
+</aside>
+
+<!-- ========== CENTER ========== -->
+
+<main class="center">
+
+<div class="meta">
+
+<div class="meta-chip">
+<span>Type</span>
+<strong id="metaType">administratif</strong>
+</div>
+
+<div class="meta-chip">
+<span>Sous-type</span>
+<strong id="metaSubType">mutuelle</strong>
+</div>
+
+<div class="meta-chip">
+<span>Mode</span>
+<strong id="metaMode">complet</strong>
+</div>
+
+</div>
+
+<textarea id="output" placeholder="Le texte apparaît ici..."></textarea>
+
+</main>
+
+<!-- ========== RIGHT PANEL ========== -->
+
+<aside id="rightPanel" class="panel right">
+
+<div class="panel-content">
+
+<!-- GENRE -->
+<section class="block">
+<div class="block-title">Genre</div>
+<div id="genderChoices" class="token-wrap"></div>
+</section>
+
+<!-- EXAMEN -->
+<section class="block">
+<div class="block-title">Examen clinique</div>
+
+<div id="mseModeChoices" class="token-wrap"></div>
+<div id="mseOrientationChoices" class="token-wrap"></div>
+<div id="mseContactChoices" class="token-wrap"></div>
+<div id="msePresentationChoices" class="token-wrap"></div>
+<div id="mseCollaborationChoices" class="token-wrap"></div>
+<div id="msePsychomotorChoices" class="token-wrap"></div>
+<div id="mseMoodChoices" class="token-wrap"></div>
+<div id="mseAnxietyChoices" class="token-wrap"></div>
+<div id="mseThoughtChoices" class="token-wrap"></div>
+<div id="mseTraumaChoices" class="token-wrap"></div>
+<div id="riskIdeasChoices" class="token-wrap"></div>
+<div id="riskAttemptChoices" class="token-wrap"></div>
+<div id="mseBehaviorChoices" class="token-wrap"></div>
+<div id="mseSleepChoices" class="token-wrap"></div>
+<div id="mseFoodChoices" class="token-wrap"></div>
+
+<textarea id="mseFree"></textarea>
+
+</section>
+
+<!-- TRAITEMENT -->
+<section class="block">
+<div class="block-title">Traitement</div>
+
+<div id="careTypeChoices" class="token-wrap"></div>
+<div id="medicationPresenceChoices" class="token-wrap"></div>
+<div id="medClassChoices" class="token-wrap"></div>
+<div id="medMoleculeChoices" class="token-wrap"></div>
+
+<input id="medDose" placeholder="Posologie">
+
+<textarea id="treatment"></textarea>
+
+</section>
+
+<!-- PSYCHOSOCIAL -->
+<section class="block">
+<div class="block-title">Psychosocial</div>
+
+<div id="psyWorkChoices" class="token-wrap"></div>
+<div id="psyIncomeChoices" class="token-wrap"></div>
+<div id="psyFamilyChoices" class="token-wrap"></div>
+
+<input id="psyChildren" placeholder="Enfants">
+
+<div id="psyHousingChoices" class="token-wrap"></div>
+
+<textarea id="psyFree"></textarea>
+
+</section>
+
+<!-- MUTUELLE -->
+<section class="block">
+<div class="block-title">Mutuelle</div>
+
+<div id="mutDxChoices" class="token-wrap"></div>
+<div id="mutInitialChoices" class="token-wrap"></div>
+<div id="mutCurrentChoices" class="token-wrap"></div>
+<div id="mutWorkChoices" class="token-wrap"></div>
+<div id="mutFunctionChoices" class="token-wrap"></div>
+<div id="mutConclusionChoices" class="token-wrap"></div>
+
+<textarea id="mutContext"></textarea>
+
+</section>
+
+</div>
+</aside>
+
+</div>
+
+<!-- ================= BOTTOM ================= -->
+
+<footer class="bottom">
+
+<div class="bottom-scroll">
+
+<section class="card">
+<div class="title">Alcool</div>
+<div id="alcTypeChoices" class="token-wrap"></div>
+<div id="alcPatternChoices" class="token-wrap"></div>
+<div id="alcFunctionChoices" class="token-wrap"></div>
+<div id="alcDependenceChoices" class="token-wrap"></div>
+<div id="alcWithdrawalChoices" class="token-wrap"></div>
+
+<input id="alcQty" placeholder="Quantité">
+<input id="alcLast" placeholder="Dernière">
+<input id="alcStart" placeholder="Début">
+</section>
+
+<section class="card">
+<div class="title">Autres</div>
+<div id="otherSubstanceChoices" class="token-wrap"></div>
+<textarea id="otherSubstances"></textarea>
+</section>
+
+<section class="card">
+<div class="title">Sevrage</div>
+
+<input id="withdrawDose" placeholder="Dose">
+<input id="withdrawDays" placeholder="Jours">
+<select id="withdrawDrug">
+<option>Valium</option>
+<option>Temesta</option>
+</select>
+
+<button id="btnBuildWithdrawal">Générer</button>
+<textarea id="withdrawOutput"></textarea>
+</section>
+
+<section class="card">
+<div class="title">Actions</div>
+
+<button id="btnSave">Save</button>
+<button id="btnLoad">Load</button>
+<button id="btnReset">Reset</button>
+
+<div id="warnings"></div>
+
+</section>
+
+</div>
+
+</footer>
+
+<!-- MENUS -->
+<div id="typeMenu" class="menu"></div>
+<div id="subTypeMenu" class="menu"></div>
+<div id="modeMenu" class="menu"></div>
+<div id="outputMenu" class="menu"></div>
+<div id="themeMenu" class="menu"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
