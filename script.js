@@ -1,4 +1,4 @@
-const STORAGE_KEY = "psychnote_workspace_v7";
+const STORAGE_KEY = "psychnote_v6";
 
 const TYPES = [
   "consultation",
@@ -54,164 +54,29 @@ const SUBTYPES = {
   ]
 };
 
-const PRESETS = {
-  "rapport mutuelle anxio-dépressif": () => {
-    state.type = "administratif";
-    state.subType = "rapport mutuelle";
-    resetSelections();
-    state.gender = "femme";
-    state.civility = "auto";
-    state.selected.mutDx = ["trouble anxio-dépressif persistant"];
-    state.selected.mutInitial = ["une anxiété envahissante", "une anhédonie marquée", "des troubles du sommeil"];
-    state.selected.mutCurrent = ["une symptomatologie anxieuse persistante", "une amélioration seulement partielle", "des difficultés de concentration"];
-    state.selected.mutWork = "non compatible";
-    state.selected.mutFunction = ["altération de la concentration", "fatigabilité importante", "difficulté à maintenir un rythme soutenu"];
-    state.selected.mutConclusion = ["poursuite du traitement encouragée", "je reste à disposition pour de plus amples informations"];
-    state.selected.mseMode = "complet";
-    state.selected.mseOrientation = ["bien orienté dans le temps et l’espace"];
-    state.selected.mseContact = ["contact adéquat"];
-    state.selected.msePresentation = ["présentation correcte"];
-    state.selected.mseCollaboration = ["bonne collaboration"];
-    state.selected.msePsychomotor = ["absence de ralentissement psychomoteur"];
-    state.selected.mseMood = ["humeur triste", "humeur fragile"];
-    state.selected.mseAnxiety = ["anxiété diffuse", "ruminations anxieuses"];
-    state.selected.mseThought = ["discours cohérent", "pensée organisée", "pas d’élément délirant"];
-    state.selected.mseBehavior = ["comportement adapté"];
-    state.selected.mseSleep = ["insomnie", "sommeil non réparateur"];
-    state.selected.mseFood = ["alimentation conservée"];
-    state.selected.careType = ["suivi psychiatrique régulier", "psychothérapie"];
-    state.selected.medicationPresence = "avec traitement médicamenteux en cours";
-  },
-
-  "rapport mutuelle dépression chronique": () => {
-    state.type = "administratif";
-    state.subType = "rapport mutuelle";
-    resetSelections();
-    state.selected.mutDx = ["dépression chronique"];
-    state.selected.mutInitial = ["une anhédonie marquée", "une perte d’élan vital", "une fatigabilité importante"];
-    state.selected.mutCurrent = ["une anhédonie encore marquée", "une baisse de l’élan", "une fragilité clinique persistante"];
-    state.selected.mutWork = "non compatible";
-    state.selected.mutFunction = ["retentissement fonctionnel global", "altération de l’organisation"];
-    state.selected.mutConclusion = ["poursuite du suivi psychiatrique encouragée", "je reste à disposition pour de plus amples informations"];
-  },
-
-  "consultation suivi anxio-dépressif": () => {
-    state.type = "consultation";
-    state.subType = "suivi";
-    resetSelections();
-    state.selected.mutDx = ["trouble anxio-dépressif"];
-    state.selected.mseMood = ["humeur triste"];
-    state.selected.mseAnxiety = ["anxiété diffuse", "ruminations anxieuses"];
-    state.selected.mseSleep = ["insomnie"];
-    state.selected.careType = ["suivi psychiatrique régulier"];
-  },
-
-  "urgences crise suicidaire": () => {
-    state.type = "urgences";
-    state.subType = "évaluation urgences";
-    resetSelections();
-    state.selected.mutDx = ["symptomatologie anxio-dépressive"];
-    state.selected.suicideIdeas = "actives";
-    state.selected.mseMood = ["humeur triste"];
-    state.selected.mseAnxiety = ["angoisse majeure"];
-  },
-
-  "préadmission sevrage alcool": () => {
-    state.type = "préadmission";
-    state.subType = "évaluation de préadmission";
-    resetSelections();
-    state.selected.alcType = ["mixte"];
-    state.selected.alcPattern = ["quotidien"];
-    state.selected.alcWithdrawal = ["hospitalier", "sevrage simple"];
-    setField("alcQty", "8 unités/jour");
-  },
-
-  "hospitalisation semaine 1": () => {
-    state.type = "hospitalisation";
-    state.subType = "semaine 1";
-    resetSelections();
-    state.selected.alcType = ["mixte"];
-    state.selected.alcPattern = ["quotidien"];
-    state.selected.mseMood = ["humeur fragile"];
-    state.selected.mseAnxiety = ["anxiété diffuse"];
-    state.selected.mseSleep = ["insomnie"];
-  },
-
-  "attestation de présence": () => {
-    state.type = "administratif";
-    state.subType = "attestation de présence";
-    resetSelections();
-  },
-
-  "mail réponse simple": () => {
-    state.type = "mail";
-    state.subType = "réponse simple";
-    resetSelections();
-    state.selected.letterTone = "sobre";
-    state.selected.letterType = "réponse clinique";
-  }
-};
+const TEMPLATE_NAMES = [
+  "rapport mutuelle anxio-dépressif",
+  "rapport mutuelle dépression chronique",
+  "consultation suivi anxio-dépressif",
+  "urgences crise suicidaire",
+  "préadmission sevrage alcool",
+  "hospitalisation semaine 1",
+  "attestation de présence",
+  "mail réponse simple"
+];
 
 const TOKEN_DEFS = [
-  // Left
   { id:"planningVisualChoices", key:"planningVisual", single:true, options:["liste","ligne du temps","tableau de bord"] },
-  { id:"dayTemplateChoices", key:"dayTemplate", single:true, options:[
-    "lundi matin 74",
-    "lundi après-midi consultations",
-    "mardi matin entretiens 74",
-    "mardi après-midi préadmissions",
-    "journée mixte",
-    "demi-journée légère",
-    "demi-journée lourde"
-  ]},
-  { id:"timeBlockChoices", key:"timeBlock", single:true, options:[
-    "matin",
-    "après-midi",
-    "demi-journée complète",
-    "bloc administratif",
-    "bloc rapports",
-    "bloc mails"
-  ]},
-  { id:"taskTypeChoices", key:"taskType", single:false, options:[
-    "rapport",
-    "mail",
-    "appel",
-    "consultation",
-    "administratif",
-    "organisation",
-    "facturation",
-    "lecture",
-    "article",
-    "clôture dossier",
-    "préparation de semaine",
-    "préadmission sevrage"
-  ]},
+  { id:"dayTemplateChoices", key:"dayTemplate", single:true, options:["lundi matin 74","lundi après-midi consultations","mardi matin entretiens 74","mardi après-midi préadmissions","journée mixte","demi-journée légère","demi-journée lourde"] },
+  { id:"timeBlockChoices", key:"timeBlock", single:true, options:["matin","après-midi","demi-journée complète","bloc administratif","bloc rapports","bloc mails"] },
+  { id:"taskTypeChoices", key:"taskType", single:false, options:["rapport","mail","appel","consultation","administratif","organisation","facturation","lecture","article","clôture dossier","préparation de semaine","préadmission sevrage"] },
   { id:"taskPriorityChoices", key:"taskPriority", single:true, options:["haute","moyenne","basse"] },
   { id:"taskEnergyChoices", key:"taskEnergy", single:true, options:["très simple","simple","moyen","lourd"] },
-  { id:"patientChecklistChoices", key:"patientChecklist", single:false, options:[
-    "patient vu",
-    "note faite",
-    "traitement adapté",
-    "communication réseau",
-    "contact assistante sociale",
-    "courrier envoyé",
-    "dossier fermé"
-  ]},
+  { id:"patientChecklistChoices", key:"patientChecklist", single:false, options:["patient vu","note faite","traitement adapté","communication réseau","contact assistante sociale","courrier envoyé","dossier fermé"] },
   { id:"dailyGoalChoices", key:"dailyGoalStatus", single:true, options:["non commencé","en cours","objectif atteint"] },
-  { id:"habitChoices", key:"habitChoices", single:false, options:[
-    "sport",
-    "batterie",
-    "guitare",
-    "lecture",
-    "2L eau",
-    "marche",
-    "coucher tôt",
-    "article",
-    "prière"
-  ]},
+  { id:"habitChoices", key:"habitChoices", single:false, options:["sport","batterie","guitare","lecture","2L eau","marche","coucher tôt","article","prière"] },
   { id:"historyViewChoices", key:"historyView", single:true, options:["semaine passée","semaine à venir","mois","historique libre"] },
 
-  // Right
   { id:"genderChoices", key:"gender", single:true, direct:"gender", options:["femme","homme"] },
   { id:"civilityChoices", key:"civility", single:true, direct:"civility", options:["auto","madame","monsieur"] },
 
@@ -241,65 +106,22 @@ const TOKEN_DEFS = [
   { id:"psyFamilyChoices", key:"psyFamily", single:false, options:["vit seul","vit en couple","soutien familial","conflits familiaux","enfants à charge","réseau limité"] },
   { id:"psyHousingChoices", key:"psyHousing", single:false, options:["logement stable","hébergé","chez les parents","logement instable","institution"] },
 
-  { id:"mutDxChoices", key:"mutDx", single:false, options:[
-    "trouble anxio-dépressif persistant",
-    "trouble anxio-dépressif",
-    "dépression chronique",
-    "trouble dépressif caractérisé",
-    "trouble anxieux généralisé",
-    "symptomatologie anxio-dépressive",
-    "trouble de l’adaptation avec humeur anxio-dépressive"
-  ]},
-  { id:"mutInitialChoices", key:"mutInitial", single:false, options:[
-    "une anxiété envahissante",
-    "une anhédonie marquée",
-    "une perte d’élan vital",
-    "des idées noires intermittentes",
-    "des troubles du sommeil",
-    "un isolement social important",
-    "des ruminations anxieuses",
-    "une fatigabilité importante",
-    "des difficultés de concentration",
-    "un ralentissement global"
-  ]},
-  { id:"mutCurrentChoices", key:"mutCurrent", single:false, options:[
-    "une symptomatologie anxieuse persistante",
-    "une anhédonie encore marquée",
-    "des ruminations envahissantes",
-    "une fatigabilité importante",
-    "des troubles du sommeil",
-    "une baisse de l’élan",
-    "des difficultés de concentration",
-    "une fragilité clinique persistante",
-    "une amélioration seulement partielle"
-  ]},
+  { id:"mutDxChoices", key:"mutDx", single:false, options:["trouble anxio-dépressif persistant","trouble anxio-dépressif","dépression chronique","trouble dépressif caractérisé","trouble anxieux généralisé","symptomatologie anxio-dépressive","trouble de l’adaptation avec humeur anxio-dépressive"] },
+  { id:"mutInitialChoices", key:"mutInitial", single:false, options:["une anxiété envahissante","une anhédonie marquée","une perte d’élan vital","des idées noires intermittentes","des troubles du sommeil","un isolement social important","des ruminations anxieuses","une fatigabilité importante","des difficultés de concentration","un ralentissement global"] },
+  { id:"mutCurrentChoices", key:"mutCurrent", single:false, options:["une symptomatologie anxieuse persistante","une anhédonie encore marquée","des ruminations envahissantes","une fatigabilité importante","des troubles du sommeil","une baisse de l’élan","des difficultés de concentration","une fragilité clinique persistante","une amélioration seulement partielle"] },
   { id:"mutWorkChoices", key:"mutWork", single:true, options:["compatible","partiellement compatible","non compatible"] },
-  { id:"mutFunctionChoices", key:"mutFunction", single:false, options:[
-    "altération de la concentration",
-    "altération de l’organisation",
-    "fatigabilité importante",
-    "difficulté à maintenir un rythme soutenu",
-    "difficulté d’adaptation au cadre professionnel",
-    "retentissement fonctionnel global"
-  ]},
-  { id:"mutConclusionChoices", key:"mutConclusion", single:false, options:[
-    "poursuite du traitement encouragée",
-    "poursuite du suivi psychiatrique encouragée",
-    "réévaluation ultérieure recommandée",
-    "je reste à disposition pour de plus amples informations"
-  ]},
+  { id:"mutFunctionChoices", key:"mutFunction", single:false, options:["altération de la concentration","altération de l’organisation","fatigabilité importante","difficulté à maintenir un rythme soutenu","difficulté d’adaptation au cadre professionnel","retentissement fonctionnel global"] },
+  { id:"mutConclusionChoices", key:"mutConclusion", single:false, options:["poursuite du traitement encouragée","poursuite du suivi psychiatrique encouragée","réévaluation ultérieure recommandée","je reste à disposition pour de plus amples informations"] },
 
   { id:"letterTypeChoices", key:"letterType", single:true, options:["réponse clinique","réponse administrative","courrier simple","transmission"] },
   { id:"letterToneChoices", key:"letterTone", single:true, options:["sobre","chaleureux","professionnel","direct"] },
   { id:"letterActionChoices", key:"letterAction", single:false, options:["confirmer","demander un retour","transmettre un document","reporter","remercier","clarifier la suite"] },
 
-  // Bottom
   { id:"alcTypeChoices", key:"alcType", single:false, options:["bière","vin","alcool fort","mixte"] },
   { id:"alcPatternChoices", key:"alcPattern", single:false, options:["quotidien","épisodique","binge","majoré le soir","avec consommation matinale"] },
   { id:"alcFunctionChoices", key:"alcFunction", single:false, options:["anxiolytique","sommeil","socialisation","gestion émotion","habitude","solitude"] },
   { id:"alcDependenceChoices", key:"alcDependence", single:false, options:["craving","perte de contrôle","tolérance","symptômes de sevrage","retentissement social","retentissement professionnel"] },
   { id:"alcWithdrawalChoices", key:"alcWithdrawal", single:false, options:["ambulatoire","hospitalier","sevrage simple","sevrage compliqué","DT","convulsions"] },
-
   { id:"otherSubstanceChoices", key:"otherSubstances", single:false, options:["cannabis","cocaïne","benzodiazépines","opiacés","tabac","autres"] }
 ];
 
@@ -313,12 +135,15 @@ const state = {
   theme: "clair",
   font: "inter",
   leftView: "day",
+  rightTab: "exam",
+  bottomTab: "alcool",
   selected: {},
   tasks: [],
   patients: [],
   docs: [],
   activeDocId: null,
-  habitTrack: {}
+  habitTrack: {},
+  withdrawalPlanText: ""
 };
 
 const $ = (id) => document.getElementById(id);
@@ -346,6 +171,14 @@ function joinClinical(arr){
   return `${items.slice(0, -1).join(", ")} et ${items[items.length - 1]}`;
 }
 
+function setField(id, value){
+  if($(id)) $(id).value = value;
+}
+
+function getField(id){
+  return $(id) ? $(id).value : "";
+}
+
 function getTokenDefByKey(key){
   return TOKEN_DEFS.find(def => def.key === key);
 }
@@ -357,22 +190,11 @@ function resetSelections(){
   });
 }
 
-resetSelections();
-
-function setField(id, value){
-  if($(id)) $(id).value = value;
-}
-
-function getField(id){
-  return $(id) ? $(id).value : "";
-}
-
 function genderPack(){
   const male = state.gender === "homme";
   const civ = state.civility === "auto"
     ? (male ? "Monsieur" : "Madame")
     : (state.civility === "monsieur" ? "Monsieur" : "Madame");
-
   return {
     male,
     civ,
@@ -414,7 +236,6 @@ function inferDSM(){
 function suggestMedication(){
   const recos = [];
   const dx = currentDiagnosisText().toLowerCase();
-
   if(dx.includes("dépress") || dx.includes("anxio-dépress")){
     recos.push("ISRS en première intention selon tolérance");
   }
@@ -509,27 +330,22 @@ function buildTreatment(){
   if((state.selected.careType || []).length){
     chunks.push(`prise en charge actuelle : ${joinClinical(state.selected.careType)}`);
   }
-
   if(state.selected.medicationPresence){
     chunks.push(state.selected.medicationPresence);
   }
-
   if((state.selected.medClass || []).length){
     chunks.push(`classe thérapeutique : ${joinClinical(state.selected.medClass)}`);
   }
-
   if((state.selected.medMolecule || []).length){
     let m = `molécule(s) : ${joinClinical(state.selected.medMolecule)}`;
     const dose = cleanText(getField("medDose"));
     if(dose) m += ` (${dose})`;
     chunks.push(m);
   }
-
   const raw = cleanText(getField("treatment"));
   if(raw){
     chunks.push(`traitement résumé : ${raw.replace(/\n/g, "; ")}`);
   }
-
   return chunks.length ? cap(chunks.join(". ")) + "." : "";
 }
 
@@ -547,7 +363,6 @@ function buildPsychosocial(){
 function buildConsumption(){
   const blocks = [];
   const alc = [];
-
   if((state.selected.alcType || []).length) alc.push(`type ${joinClinical(state.selected.alcType)}`);
   if(cleanText(getField("alcQty"))) alc.push(`quantité ${cleanText(getField("alcQty"))}`);
   if((state.selected.alcPattern || []).length) alc.push(`pattern ${joinClinical(state.selected.alcPattern)}`);
@@ -576,22 +391,21 @@ function buildMutuelle(){
   const g = genderPack();
   let txt = "";
 
-  txt += `Je vois en consultation de psychiatrie ${g.civ} pour ${currentDiagnosisText()}.`;
-  txt += `\n\n`;
+  txt += `Je vois en consultation de psychiatrie ${g.civ} pour ${currentDiagnosisText()}.\n\n`;
 
   if((state.selected.mutInitial || []).length){
     txt += `Au début de la prise en charge, le tableau était marqué par ${joinClinical(state.selected.mutInitial)}.\n\n`;
   }
 
   if((state.selected.mutCurrent || []).length || cleanText(getField("mutContext"))){
-    txt += "Actuellement, ";
+    txt += `Actuellement, `;
     if((state.selected.mutCurrent || []).length){
       txt += `il persiste ${joinClinical(state.selected.mutCurrent)}. `;
     }
     if(cleanText(getField("mutContext"))){
       txt += sentence(getField("mutContext")) + " ";
     }
-    txt += "\n\n";
+    txt += `\n\n`;
   }
 
   txt += `Sur le plan clinique, ${buildMSE()}\n\n`;
@@ -609,13 +423,12 @@ function buildMutuelle(){
     } else {
       txt += ".";
     }
-    txt += "\n\n";
+    txt += `\n\n`;
   }
 
   if(state.selected.mutWork === "non compatible"){
     txt += `${g.civ} ne présente pas un état compatible avec une reprise du travail. `;
-    txt += `Les symptômes persistent et continuent d’altérer de manière significative les capacités d’adaptation, de concentration, d’organisation ainsi que le maintien d’un rythme soutenu dans un cadre professionnel.`;
-    txt += "\n\n";
+    txt += `Les symptômes persistent et continuent d’altérer de manière significative les capacités d’adaptation, de concentration, d’organisation ainsi que le maintien d’un rythme soutenu dans un cadre professionnel.\n\n`;
   } else if(state.selected.mutWork === "partiellement compatible"){
     txt += `L’état clinique actuel n’apparaît que partiellement compatible avec une reprise d’activité, et nécessite une réévaluation prudente et progressive.\n\n`;
   } else if(state.selected.mutWork === "compatible"){
@@ -647,23 +460,16 @@ function buildConsultation(){
   txt += `Évolution générale\n\n`;
   txt += `Le tableau clinique reste fluctuant, avec une évolution globalement fragile.\n\n`;
 
-  txt += `Examen clinique / mental\n\n`;
-  txt += `${buildMSE()}\n\n`;
+  txt += `Examen clinique / mental\n\n${buildMSE()}\n\n`;
 
   const psycho = buildPsychosocial();
-  if(psycho){
-    txt += `Psychosocial\n\n${psycho}\n\n`;
-  }
+  if(psycho) txt += `Psychosocial\n\n${psycho}\n\n`;
 
   const cons = buildConsumption();
-  if(cons){
-    txt += `Consommations\n\n${cons}\n\n`;
-  }
+  if(cons) txt += `Consommations\n\n${cons}\n\n`;
 
   const treatment = buildTreatment();
-  if(treatment){
-    txt += `Traitement\n\n${treatment}\n\n`;
-  }
+  if(treatment) txt += `Traitement\n\n${treatment}\n\n`;
 
   txt += `Hypothèse diagnostique\n\n${inferDSM()}\n\n`;
   txt += `Suggestion médicamenteuse\n\n${suggestMedication()}\n\n`;
@@ -853,17 +659,13 @@ function buildMail(){
   const free = cleanText(getField("letterFree"));
 
   let subject = subtype;
-  if(actions.length){
-    subject += " — " + joinClinical(actions);
-  }
+  if(actions.length) subject += " — " + joinClinical(actions);
 
   let greeting = "Bonjour,";
   if(tone === "chaleureux") greeting = "Bonjour,";
   if(tone === "direct") greeting = "Bonjour,";
 
-  let body = free || `Je reviens vers vous concernant ${subtype}.`;
-  body = sentence(body);
-
+  let body = sentence(free || `Je reviens vers vous concernant ${subtype}.`);
   return `Objet : ${subject}
 
 ${greeting}
@@ -957,10 +759,12 @@ PLAN
 
 function buildTodoText(){
   const lines = [];
-  const tasks = state.tasks.length ? state.tasks : cleanText(getField("taskInbox")).split("\n").filter(Boolean).map(t => ({ title:t, done:false }));
+  const tasks = state.tasks.length
+    ? state.tasks
+    : cleanText(getField("taskInbox")).split("\n").filter(Boolean).map(t => ({ title:t, done:false }));
   const patients = cleanText(getField("patientListInput")).split("\n").filter(Boolean);
 
-  lines.push(`TO DO — ${state.leftView === "week" ? "SEMAINE" : state.leftView === "halfday" ? "DEMI-JOURNÉE" : "JOUR"}`);
+  lines.push(`TO DO — ${state.leftView === "week" ? "SEMAINE" : state.leftView === "halfday" ? "DEMI-JOURNÉE" : state.leftView === "month" ? "MOIS" : "JOUR"}`);
   lines.push("");
 
   if(state.selected.dayTemplate){
@@ -1016,11 +820,9 @@ function computeWarnings(){
   if(state.subType === "rapport mutuelle" && !((state.selected.mutDx || []).length || cleanText(getField("mutDxFree")))){
     warnings.push("Rapport mutuelle sans diagnostic renseigné.");
   }
-
   if(state.selected.mutWork === "non compatible" && !((state.selected.mutFunction || []).length || cleanText(getField("mutFunctionFree")))){
     warnings.push("Incompatibilité au travail sans retentissement fonctionnel explicité.");
   }
-
   if(cleanText(getField("alcQty")) && !(state.selected.alcType || []).length){
     warnings.push("Quantité alcool renseignée sans type d’alcool.");
   }
@@ -1034,170 +836,8 @@ function computeWarnings(){
   }
 }
 
-function renderMenus(){
-  renderMenu("typeMenu", TYPES, state.type, (value) => {
-    state.type = value;
-    state.subType = SUBTYPES[state.type][0];
-    updateDisplays();
-    renderDynamicChoices();
-    regenerateCurrentDoc();
-  });
-
-  renderMenu("subTypeMenu", SUBTYPES[state.type], state.subType, (value) => {
-    state.subType = value;
-    updateDisplays();
-    regenerateCurrentDoc();
-  });
-
-  renderMenu("modeMenu", ["rapide","complet"], state.mode, (value) => {
-    state.mode = value;
-    updateDisplays();
-    regenerateCurrentDoc();
-  });
-
-  renderMenu("outputMenu", ["texte","questionnaire","todo"], state.output, (value) => {
-    state.output = value;
-    updateDisplays();
-    regenerateCurrentDoc();
-  });
-
-  renderMenu("themeMenu", ["clair","sombre"], state.theme, (value) => {
-    state.theme = value;
-    applyTheme();
-    updateDisplays();
-  });
-
-  renderMenu("fontMenu", ["inter","mono","serif"], state.font, (value) => {
-    state.font = value;
-    applyFont();
-    updateDisplays();
-  });
-}
-
-function renderMenu(id, options, current, onClick){
-  const menu = $(id);
-  menu.innerHTML = "";
-  options.forEach(opt => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "menu-item" + (opt === current ? " active" : "");
-    btn.textContent = opt;
-    btn.addEventListener("click", () => {
-      onClick(opt);
-      closeMenus();
-    });
-    menu.appendChild(btn);
-  });
-}
-
-function renderTokenGroups(){
-  TOKEN_DEFS.forEach(def => {
-    const container = $(def.id);
-    if(!container) return;
-    container.innerHTML = "";
-
-    const current = def.direct ? state[def.direct] : state.selected[def.key];
-
-    def.options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "token";
-      btn.textContent = opt;
-      const isActive = def.single
-        ? current === opt
-        : Array.isArray(current) && current.includes(opt);
-      if(isActive) btn.classList.add("active");
-
-      btn.addEventListener("click", () => {
-        if(def.direct){
-          state[def.direct] = opt;
-        }
-        if(def.single){
-          state.selected[def.key] = opt;
-        } else {
-          const arr = state.selected[def.key] || [];
-          const idx = arr.indexOf(opt);
-          if(idx >= 0) arr.splice(idx, 1);
-          else arr.push(opt);
-          state.selected[def.key] = arr;
-        }
-
-        if(def.key === "gender") state.gender = opt;
-        if(def.key === "civility") state.civility = opt;
-
-        if(def.key === "habitChoices"){
-          if(!state.habitTrack[opt]){
-            state.habitTrack[opt] = [false,false,false,false,false,false,false];
-          }
-          renderHabitGrid();
-        }
-
-        renderTokenGroups();
-        regenerateCurrentDoc();
-      });
-
-      container.appendChild(btn);
-    });
-  });
-
-  renderDynamicChoices();
-}
-
-function renderDynamicChoices(){
-  renderQuickChoices(
-    "docTypeChoices",
-    TYPES,
-    state.type,
-    (value) => {
-      state.type = value;
-      state.subType = SUBTYPES[value][0];
-      updateDisplays();
-      renderMenus();
-      renderDynamicChoices();
-      regenerateCurrentDoc();
-    }
-  );
-
-  renderQuickChoices(
-    "docSubTypeQuickChoices",
-    SUBTYPES[state.type],
-    state.subType,
-    (value) => {
-      state.subType = value;
-      updateDisplays();
-      renderMenus();
-      regenerateCurrentDoc();
-    }
-  );
-
-  renderQuickChoices(
-    "docTemplateChoices",
-    Object.keys(PRESETS),
-    "",
-    (value) => {
-      PRESETS[value]();
-      renderAll();
-      regenerateCurrentDoc();
-    }
-  );
-}
-
-function renderQuickChoices(containerId, options, current, onClick){
-  const el = $(containerId);
-  if(!el) return;
-  el.innerHTML = "";
-  options.forEach(opt => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "token" + (opt === current ? " active" : "");
-    btn.textContent = opt;
-    btn.addEventListener("click", () => onClick(opt));
-    el.appendChild(btn);
-  });
-}
-
 function applyTheme(){
-  document.body.classList.remove("theme-light", "theme-dark");
+  document.body.classList.remove("theme-light","theme-dark");
   document.body.classList.add(state.theme === "sombre" ? "theme-dark" : "theme-light");
 }
 
@@ -1224,14 +864,71 @@ function setText(id, value){
   if($(id)) $(id).textContent = value;
 }
 
+function renderMenu(id, options, current, onClick){
+  const menu = $(id);
+  menu.innerHTML = "";
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "menu-item" + (opt === current ? " active" : "");
+    btn.textContent = opt;
+    btn.addEventListener("click", () => {
+      onClick(opt);
+      closeMenus();
+    });
+    menu.appendChild(btn);
+  });
+}
+
 function positionMenu(menuId, button){
   const menu = $(menuId);
   const rect = button.getBoundingClientRect();
   menu.style.left = `${Math.max(12, rect.left)}px`;
 }
 
+function renderMenus(){
+  renderMenu("menuType", TYPES, state.type, (value) => {
+    state.type = value;
+    state.subType = SUBTYPES[state.type][0];
+    updateDisplays();
+    renderMenus();
+    regenerateCurrentDoc();
+  });
+
+  renderMenu("menuSubType", SUBTYPES[state.type], state.subType, (value) => {
+    state.subType = value;
+    updateDisplays();
+    renderMenus();
+    regenerateCurrentDoc();
+  });
+
+  renderMenu("menuMode", ["rapide","complet"], state.mode, (value) => {
+    state.mode = value;
+    updateDisplays();
+    regenerateCurrentDoc();
+  });
+
+  renderMenu("menuOutput", ["texte","questionnaire","todo"], state.output, (value) => {
+    state.output = value;
+    updateDisplays();
+    regenerateCurrentDoc();
+  });
+
+  renderMenu("menuTheme", ["clair","sombre"], state.theme, (value) => {
+    state.theme = value;
+    applyTheme();
+    updateDisplays();
+  });
+
+  renderMenu("menuFont", ["inter","mono","serif"], state.font, (value) => {
+    state.font = value;
+    applyFont();
+    updateDisplays();
+  });
+}
+
 function closeMenus(){
-  ["typeMenu","subTypeMenu","modeMenu","outputMenu","themeMenu","fontMenu"].forEach(id => $(id).classList.add("hidden"));
+  ["menuType","menuSubType","menuMode","menuOutput","menuTheme","menuFont"].forEach(id => $(id).classList.add("hidden"));
 }
 
 function initMenus(){
@@ -1255,9 +952,169 @@ function initMenus(){
   });
 }
 
+function renderTokens(){
+  TOKEN_DEFS.forEach(def => {
+    const container = $(def.id);
+    if(!container) return;
+    container.innerHTML = "";
+    const current = def.direct ? state[def.direct] : state.selected[def.key];
+
+    def.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "token";
+      btn.textContent = opt;
+      const active = def.single
+        ? current === opt
+        : Array.isArray(current) && current.includes(opt);
+      if(active) btn.classList.add("active");
+
+      btn.addEventListener("click", () => {
+        if(def.direct){
+          state[def.direct] = opt;
+        }
+        if(def.single){
+          state.selected[def.key] = opt;
+        } else {
+          const arr = state.selected[def.key] || [];
+          const idx = arr.indexOf(opt);
+          if(idx >= 0) arr.splice(idx, 1);
+          else arr.push(opt);
+          state.selected[def.key] = arr;
+        }
+
+        if(def.key === "gender") state.gender = opt;
+        if(def.key === "civility") state.civility = opt;
+        if(def.key === "habitChoices"){
+          if(!state.habitTrack[opt]) state.habitTrack[opt] = [false,false,false,false,false,false,false];
+          renderHabitGrid();
+        }
+
+        renderTokens();
+        regenerateCurrentDoc();
+      });
+
+      container.appendChild(btn);
+    });
+  });
+
+  renderTemplateChoices();
+}
+
+function renderTemplateChoices(){
+  const el = $("docTemplateChoices");
+  if(!el) return;
+  el.innerHTML = "";
+  TEMPLATE_NAMES.forEach(name => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "token";
+    btn.textContent = name;
+    btn.addEventListener("click", () => {
+      applyTemplate(name);
+      renderAll();
+      regenerateCurrentDoc();
+    });
+    el.appendChild(btn);
+  });
+}
+
+function applyTemplate(name){
+  resetSelections();
+  if(name === "rapport mutuelle anxio-dépressif"){
+    state.type = "administratif";
+    state.subType = "rapport mutuelle";
+    state.gender = "femme";
+    state.civility = "auto";
+    state.selected.mutDx = ["trouble anxio-dépressif persistant"];
+    state.selected.mutInitial = ["une anxiété envahissante","une anhédonie marquée","des troubles du sommeil"];
+    state.selected.mutCurrent = ["une symptomatologie anxieuse persistante","une amélioration seulement partielle","des difficultés de concentration"];
+    state.selected.mutWork = "non compatible";
+    state.selected.mutFunction = ["altération de la concentration","fatigabilité importante","difficulté à maintenir un rythme soutenu"];
+    state.selected.mutConclusion = ["poursuite du traitement encouragée","je reste à disposition pour de plus amples informations"];
+    state.selected.mseMode = "complet";
+    state.selected.mseOrientation = ["bien orienté dans le temps et l’espace"];
+    state.selected.mseContact = ["contact adéquat"];
+    state.selected.msePresentation = ["présentation correcte"];
+    state.selected.mseCollaboration = ["bonne collaboration"];
+    state.selected.msePsychomotor = ["absence de ralentissement psychomoteur"];
+    state.selected.mseMood = ["humeur triste","humeur fragile"];
+    state.selected.mseAnxiety = ["anxiété diffuse","ruminations anxieuses"];
+    state.selected.mseThought = ["discours cohérent","pensée organisée","pas d’élément délirant"];
+    state.selected.mseBehavior = ["comportement adapté"];
+    state.selected.mseSleep = ["insomnie","sommeil non réparateur"];
+    state.selected.mseFood = ["alimentation conservée"];
+    state.selected.careType = ["suivi psychiatrique régulier","psychothérapie"];
+    state.selected.medicationPresence = "avec traitement médicamenteux en cours";
+  }
+
+  if(name === "rapport mutuelle dépression chronique"){
+    state.type = "administratif";
+    state.subType = "rapport mutuelle";
+    state.selected.mutDx = ["dépression chronique"];
+    state.selected.mutInitial = ["une anhédonie marquée","une perte d’élan vital","une fatigabilité importante"];
+    state.selected.mutCurrent = ["une anhédonie encore marquée","une baisse de l’élan","une fragilité clinique persistante"];
+    state.selected.mutWork = "non compatible";
+    state.selected.mutFunction = ["retentissement fonctionnel global","altération de l’organisation"];
+    state.selected.mutConclusion = ["poursuite du suivi psychiatrique encouragée","je reste à disposition pour de plus amples informations"];
+  }
+
+  if(name === "consultation suivi anxio-dépressif"){
+    state.type = "consultation";
+    state.subType = "suivi";
+    state.selected.mutDx = ["trouble anxio-dépressif"];
+    state.selected.mseMood = ["humeur triste"];
+    state.selected.mseAnxiety = ["anxiété diffuse","ruminations anxieuses"];
+    state.selected.mseSleep = ["insomnie"];
+    state.selected.careType = ["suivi psychiatrique régulier"];
+  }
+
+  if(name === "urgences crise suicidaire"){
+    state.type = "urgences";
+    state.subType = "évaluation urgences";
+    state.selected.suicideIdeas = "actives";
+    state.selected.mseMood = ["humeur triste"];
+    state.selected.mseAnxiety = ["angoisse majeure"];
+  }
+
+  if(name === "préadmission sevrage alcool"){
+    state.type = "préadmission";
+    state.subType = "évaluation de préadmission";
+    state.selected.alcType = ["mixte"];
+    state.selected.alcPattern = ["quotidien"];
+    state.selected.alcWithdrawal = ["hospitalier","sevrage simple"];
+    setField("alcQty", "8 unités/jour");
+  }
+
+  if(name === "hospitalisation semaine 1"){
+    state.type = "hospitalisation";
+    state.subType = "semaine 1";
+    state.selected.alcType = ["mixte"];
+    state.selected.alcPattern = ["quotidien"];
+    state.selected.mseMood = ["humeur fragile"];
+    state.selected.mseAnxiety = ["anxiété diffuse"];
+    state.selected.mseSleep = ["insomnie"];
+  }
+
+  if(name === "attestation de présence"){
+    state.type = "administratif";
+    state.subType = "attestation de présence";
+  }
+
+  if(name === "mail réponse simple"){
+    state.type = "mail";
+    state.subType = "réponse simple";
+    state.selected.letterTone = "sobre";
+    state.selected.letterType = "réponse clinique";
+  }
+
+  updateDisplays();
+  renderMenus();
+}
+
 function createDoc(title, content = ""){
   return {
-    id: "doc_" + Math.random().toString(36).slice(2, 9),
+    id: "doc_" + Math.random().toString(36).slice(2, 10),
     title,
     content
   };
@@ -1276,13 +1133,12 @@ function currentDoc(){
 }
 
 function defaultDocTitle(){
-  return `${state.subType}`;
+  return state.subType;
 }
 
 function renderDocumentTabs(){
   ensureDocs();
   const container = $("documentTabs");
-  if(!container) return;
   container.innerHTML = "";
 
   state.docs.forEach(doc => {
@@ -1368,8 +1224,7 @@ function closeCurrentDoc(){
 
 function newSimilarDoc(){
   saveCurrentOutputToDoc();
-  const content = buildGeneratedContent();
-  const doc = createDoc(defaultDocTitle() + " 2", content);
+  const doc = createDoc(defaultDocTitle() + " 2", buildGeneratedContent());
   state.docs.push(doc);
   state.activeDocId = doc.id;
   renderDocumentTabs();
@@ -1381,8 +1236,8 @@ function renderHabitGrid(){
   if(!grid) return;
   grid.innerHTML = "";
 
-  const selectedHabits = state.selected.habitChoices || [];
-  if(!selectedHabits.length){
+  const habits = state.selected.habitChoices || [];
+  if(!habits.length){
     for(let i = 0; i < 7; i++){
       const cell = document.createElement("div");
       cell.className = "habit-cell";
@@ -1391,21 +1246,19 @@ function renderHabitGrid(){
     return;
   }
 
-  selectedHabits.forEach(habit => {
+  habits.forEach(habit => {
+    if(!state.habitTrack[habit]) state.habitTrack[habit] = [false,false,false,false,false,false,false];
     for(let i = 0; i < 7; i++){
       const cell = document.createElement("div");
       cell.className = "habit-cell";
       cell.title = `${habit} — jour ${i+1}`;
-      if(state.habitTrack[habit] && state.habitTrack[habit][i]){
-        cell.style.opacity = "1";
+      if(state.habitTrack[habit][i]){
         cell.style.outline = "2px solid var(--accent)";
+        cell.style.opacity = "1";
       } else {
-        cell.style.opacity = "0.55";
+        cell.style.opacity = "0.5";
       }
       cell.addEventListener("click", () => {
-        if(!state.habitTrack[habit]){
-          state.habitTrack[habit] = [false,false,false,false,false,false,false];
-        }
         state.habitTrack[habit][i] = !state.habitTrack[habit][i];
         renderHabitGrid();
       });
@@ -1439,10 +1292,16 @@ function spinRoulette(micro = false){
     alert("Aucune tâche disponible.");
     return;
   }
+
   let pool = list;
   if(micro){
-    pool = list.filter(t => ["mail","appel","administratif"].some(x => (t.type || []).includes(x))) || list;
+    const filtered = list.filter(t => {
+      const arr = Array.isArray(t.type) ? t.type : [];
+      return arr.includes("mail") || arr.includes("appel") || arr.includes("administratif");
+    });
+    if(filtered.length) pool = filtered;
   }
+
   const pick = pool[Math.floor(Math.random() * pool.length)];
   alert(`👉 Fais ça maintenant :\n\n${pick.title}`);
 }
@@ -1480,28 +1339,11 @@ function saveState(){
   saveCurrentOutputToDoc();
   const fields = {};
   document.querySelectorAll("input, textarea, select").forEach(el => {
-    if(el.id !== "output"){
-      fields[el.id] = el.value;
-    }
+    if(el.id !== "output") fields[el.id] = el.value;
   });
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
-    gender: state.gender,
-    civility: state.civility,
-    type: state.type,
-    subType: state.subType,
-    mode: state.mode,
-    output: state.output,
-    theme: state.theme,
-    font: state.font,
-    leftView: state.leftView,
-    selected: state.selected,
-    tasks: state.tasks,
-    patients: state.patients,
-    docs: state.docs,
-    activeDocId: state.activeDocId,
-    habitTrack: state.habitTrack,
-    withdrawalPlanText: state.withdrawalPlanText,
+    ...state,
     fields
   }));
 }
@@ -1520,6 +1362,8 @@ function loadState(){
   state.theme = parsed.theme || state.theme;
   state.font = parsed.font || state.font;
   state.leftView = parsed.leftView || state.leftView;
+  state.rightTab = parsed.rightTab || state.rightTab;
+  state.bottomTab = parsed.bottomTab || state.bottomTab;
   state.selected = parsed.selected || state.selected;
   state.tasks = parsed.tasks || [];
   state.patients = parsed.patients || [];
@@ -1547,13 +1391,15 @@ function resetAll(){
   state.theme = "clair";
   state.font = "inter";
   state.leftView = "day";
-  resetSelections();
+  state.rightTab = "exam";
+  state.bottomTab = "alcool";
   state.tasks = [];
   state.patients = [];
   state.docs = [];
   state.activeDocId = null;
   state.habitTrack = {};
   state.withdrawalPlanText = "";
+  resetSelections();
 
   document.querySelectorAll("input, textarea").forEach(el => {
     if(el.id !== "output") el.value = "";
@@ -1572,7 +1418,7 @@ function setTodayDefaults(){
   setField("withdrawStartDate", date);
 }
 
-function initButtons(){
+function initTopButtons(){
   $("toggleLeftPanel")?.addEventListener("click", () => {
     $("leftPanel").classList.toggle("collapsed");
     document.body.classList.toggle("left-collapsed");
@@ -1606,7 +1452,9 @@ function initButtons(){
   });
 
   $("btnPrint")?.addEventListener("click", () => window.print());
+}
 
+function initDocumentButtons(){
   $("btnNewDocumentTab")?.addEventListener("click", newBlankDoc);
   $("btnDuplicateDocumentTab")?.addEventListener("click", duplicateCurrentDoc);
   $("btnClearCurrentDocumentTab")?.addEventListener("click", clearCurrentDoc);
@@ -1614,6 +1462,28 @@ function initButtons(){
   $("btnRegenerateCurrentTab")?.addEventListener("click", regenerateCurrentDoc);
   $("btnNewLetterFromCurrent")?.addEventListener("click", newSimilarDoc);
   $("btnNewBlankDocument")?.addEventListener("click", newBlankDoc);
+
+  $("output")?.addEventListener("input", () => {
+    const doc = currentDoc();
+    if(doc) doc.content = $("output").value;
+  });
+}
+
+function initBottomBar(){
+  $("toggleBottomBar")?.addEventListener("click", () => {
+    $("bottomBar").classList.toggle("collapsed");
+    document.body.classList.toggle("bottom-collapsed");
+  });
+
+  document.querySelectorAll("[data-bottom-tab]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("[data-bottom-tab]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.bottomTab = btn.dataset.bottomTab;
+      document.querySelectorAll(".bottom-tab").forEach(t => t.classList.remove("active"));
+      $(`bottomTab-${state.bottomTab}`).classList.add("active");
+    });
+  });
 
   $("btnBuildWithdrawal")?.addEventListener("click", () => {
     state.withdrawalPlanText = buildWithdrawalPlanText();
@@ -1625,26 +1495,13 @@ function initButtons(){
   $("btnLoad")?.addEventListener("click", loadState);
   $("btnReset")?.addEventListener("click", resetAll);
   $("btnDemo")?.addEventListener("click", () => {
-    PRESETS["rapport mutuelle anxio-dépressif"]();
+    applyTemplate("rapport mutuelle anxio-dépressif");
     renderAll();
     regenerateCurrentDoc();
   });
+}
 
-  $("btnDistributeTasks")?.addEventListener("click", parseTaskInbox);
-  $("btnSpinRoulette")?.addEventListener("click", () => spinRoulette(false));
-  $("btnOneMicroTask")?.addEventListener("click", () => spinRoulette(true));
-
-  $("output")?.addEventListener("input", () => {
-    const doc = currentDoc();
-    if(doc) doc.content = $("output").value;
-  });
-
-  document.querySelectorAll("input, textarea, select").forEach(el => {
-    if(el.id === "output") return;
-    el.addEventListener("input", () => regenerateCurrentDoc());
-    el.addEventListener("change", () => regenerateCurrentDoc());
-  });
-
+function initLeftButtons(){
   document.querySelectorAll("[data-left-view]").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll("[data-left-view]").forEach(b => b.classList.remove("active"));
@@ -1653,6 +1510,30 @@ function initButtons(){
       regenerateCurrentDoc();
     });
   });
+
+  $("btnDistributeTasks")?.addEventListener("click", parseTaskInbox);
+  $("btnSpinRoulette")?.addEventListener("click", () => spinRoulette(false));
+  $("btnOneMicroTask")?.addEventListener("click", () => spinRoulette(true));
+}
+
+function initRightTabs(){
+  document.querySelectorAll("[data-right-tab]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("[data-right-tab]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.rightTab = btn.dataset.rightTab;
+      document.querySelectorAll(".right-tab").forEach(tab => tab.classList.remove("active"));
+      $(`rightTab-${state.rightTab}`).classList.add("active");
+    });
+  });
+}
+
+function initFieldListeners(){
+  document.querySelectorAll("input, textarea, select").forEach(el => {
+    if(el.id === "output") return;
+    el.addEventListener("input", () => regenerateCurrentDoc());
+    el.addEventListener("change", () => regenerateCurrentDoc());
+  });
 }
 
 function renderAll(){
@@ -1660,16 +1541,35 @@ function renderAll(){
   applyFont();
   updateDisplays();
   renderMenus();
-  renderTokenGroups();
+  renderTokens();
   renderDocumentTabs();
   renderHabitGrid();
   computeWarnings();
+
+  document.querySelectorAll(".right-tab").forEach(tab => tab.classList.remove("active"));
+  $(`rightTab-${state.rightTab}`)?.classList.add("active");
+
+  document.querySelectorAll("[data-right-tab]").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.rightTab === state.rightTab);
+  });
+
+  document.querySelectorAll(".bottom-tab").forEach(tab => tab.classList.remove("active"));
+  $(`bottomTab-${state.bottomTab}`)?.classList.add("active");
+
+  document.querySelectorAll("[data-bottom-tab]").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.bottomTab === state.bottomTab);
+  });
 }
 
 function init(){
   setTodayDefaults();
   initMenus();
-  initButtons();
+  initTopButtons();
+  initDocumentButtons();
+  initBottomBar();
+  initLeftButtons();
+  initRightTabs();
+  initFieldListeners();
   renderAll();
   regenerateCurrentDoc();
 }
